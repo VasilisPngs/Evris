@@ -1,0 +1,6 @@
+-keep class com.evris.android.** { *; }
+-keep class com.aurora.gplayapi.** { *; }
+-keep class com.google.gson.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn com.aurora.gplayapi.**
