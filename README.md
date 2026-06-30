@@ -1,33 +1,40 @@
 # Evris
 
-Android app update scout for installed apps.
+Evris is an Android update scout for installed apps.
 
-## Status
+It scans installed apps on the device and checks for newer versions. APKMirror is the main source. Google Play checking is optional and experimental through anonymous Aurora/GPlayApi access.
 
-Android 16+ Kotlin/Compose app.
+## Features
 
-## Current behavior
+- Local installed-app scan
+- Installed version and available version comparison
+- APKMirror update checks
+- Optional experimental Google Play update checks
+- Google Play base and split APK handling through Android PackageInstaller
+- User and system app visibility
+- Search by app name or package name
+- Manual refresh from the main screen
+- Light and dark theme support
+- Signed release APK generation through GitHub Actions
 
-- Scans installed Android apps locally
-- Shows installed apps, icons, package names, versions and user/system status
-- Checks APKMirror update data through the APKMirror API-style backend
-- Optionally checks Google Play through anonymous Aurora/GPlayApi access
-- Installs Google Play base and split APK files through Android PackageInstaller
-- Filters prerelease update channels from Settings
-- Searches installed apps by app name or package name
-- Rescans installed apps and checks updates from the top refresh action
-- Supports manual light/dark theme switching
-- Uses bottom navigation for Home, Search and Settings
-- Uses Android 16 API 36 baseline for compile, target and min SDK
+## Android
+
+- Minimum SDK: Android 16 / API 36
+- Target SDK: Android 16 / API 36
+- Compile SDK: Android 16 / API 36
 
 ## Package
 
-`com.evris.android`
+```text
+com.evris.android
+```
 
 ## Release asset
 
-`Evris-1.0.0.apk`
+```text
+Evris-1.0.0.apk
+```
 
-## Notes
+## Google Play source
 
-Google Play source is experimental and can break because it depends on anonymous Aurora/GPlayApi behavior.
+Google Play support is experimental. It depends on anonymous Aurora/GPlayApi behavior and can break if Google Play or Aurora authentication changes.
