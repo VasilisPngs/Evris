@@ -53,8 +53,6 @@ jobs:
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
           echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
           echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
-          ls -la "$ANDROID_HOME" || true
-          ls -la "$ANDROID_HOME/cmdline-tools/latest/bin" || true
 
       - name: Ensure Android SDK packages
         run: |
@@ -91,7 +89,6 @@ jobs:
           APK_PATH="$(find app/build/outputs/apk/release -maxdepth 1 -name '*.apk' | head -n 1)"
           test -n "$APK_PATH"
           cp "$APK_PATH" "dist/Evris-${VERSION_NAME}.apk"
-          ls -la dist
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
