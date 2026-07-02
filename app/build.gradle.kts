@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.evris.android"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.evris.android"
         minSdk = 36
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 100
         versionName = "1.0.0"
     }
