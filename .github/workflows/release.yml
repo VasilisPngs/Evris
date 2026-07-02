@@ -1,4 +1,4 @@
-name: Release Evris
+name: Release
 
 on:
   push:
