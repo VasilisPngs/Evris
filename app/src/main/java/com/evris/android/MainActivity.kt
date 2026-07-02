@@ -20,6 +20,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -122,14 +123,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val context = LocalContext.current
-            var darkMode by remember { mutableStateOf(SettingsStore.readDarkMode(context)) }
+            var themeMode by remember { mutableStateOf(SettingsStore.readThemeMode(context)) }
 
-            EvrisTheme(darkMode = darkMode) {
+            EvrisTheme(themeMode = themeMode) {
                 EvrisRoot(
-                    darkMode = darkMode,
-                    onDarkModeChange = { enabled ->
-                        darkMode = enabled
-                        SettingsStore.writeDarkMode(context, enabled)
+                    themeMode = themeMode,
+                    onThemeChange = { mode ->
+                        themeMode = mode
+                        SettingsStore.writeThemeMode(context, mode)
                     }
                 )
             }
@@ -139,10 +140,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun EvrisTheme(
-    darkMode: Boolean,
+    themeMode: Int,
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkMode) {
+    val dark = when (themeMode) {
+        SettingsStore.THEME_LIGHT -> false
+        SettingsStore.THEME_DARK -> true
+        else -> isSystemInDarkTheme()
+    }
+    val colors = if (dark) {
         darkColorScheme(
             primary = Color(0xFFC6C6C6),
             onPrimary = Color(0xFF303030),
@@ -231,8 +237,8 @@ fun EvrisTheme(
 
 @Composable
 fun EvrisRoot(
-    darkMode: Boolean,
-    onDarkModeChange: (Boolean) -> Unit
+    themeMode: Int,
+    onThemeChange: (Int) -> Unit
 ) {
     val context = LocalContext.current
     val listState = rememberLazyListState()
@@ -346,9 +352,7 @@ fun EvrisRoot(
             topBar = {
                 EvrisTopBar(
                     screen = currentScreen,
-                    darkMode = darkMode,
                     loading = loadingApps || checkingUpdates,
-                    onToggleTheme = { onDarkModeChange(!darkMode) },
                     onRefresh = { scanRequest++ }
                 )
             }
@@ -399,6 +403,8 @@ fun EvrisRoot(
                             .padding(start = 14.dp, top = 8.dp, end = 14.dp, bottom = 120.dp)
                     ) {
                         SettingsScreen(
+                            themeMode = themeMode,
+                            onThemeChange = onThemeChange,
                             settings = releaseSettings,
                             playEnabled = playEnabled,
                             onPlayChanged = { value ->
@@ -457,9 +463,7 @@ fun EvrisRoot(
 @Composable
 private fun EvrisTopBar(
     screen: RootScreen,
-    darkMode: Boolean,
     loading: Boolean,
-    onToggleTheme: () -> Unit,
     onRefresh: () -> Unit
 ) {
     val title = when (screen) {
@@ -486,13 +490,6 @@ private fun EvrisTopBar(
                 fontWeight = FontWeight.Bold,
                 maxLines = 1
             )
-
-            IconButton(onClick = onToggleTheme) {
-                Icon(
-                    painter = painterResource(if (darkMode) R.drawable.ic_light_mode else R.drawable.ic_dark_mode),
-                    contentDescription = if (darkMode) "Switch to light mode" else "Switch to dark mode"
-                )
-            }
 
             IconButton(
                 onClick = onRefresh,

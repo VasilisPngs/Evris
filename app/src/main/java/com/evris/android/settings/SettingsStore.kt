@@ -9,7 +9,11 @@ object SettingsStore {
     private const val INCLUDE_BETA = "include_beta"
     private const val INCLUDE_RC = "include_rc"
     private const val INCLUDE_PRERELEASE = "include_prerelease"
-    private const val DARK_MODE = "dark_mode"
+    private const val THEME_MODE = "theme_mode"
+
+    const val THEME_SYSTEM = 0
+    const val THEME_LIGHT = 1
+    const val THEME_DARK = 2
     private const val PLAY_ENABLED = "play_enabled"
     private const val PLAY_AUTH = "play_auth"
     private const val LAST_PLAY_CHECK = "last_play_check"
@@ -40,9 +44,9 @@ object SettingsStore {
             .apply()
     }
 
-    fun readDarkMode(context: Context): Boolean {
+    fun readThemeMode(context: Context): Int {
         return context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
-            .getBoolean(DARK_MODE, true)
+            .getInt(THEME_MODE, THEME_SYSTEM)
     }
 
     fun readPlayEnabled(context: Context): Boolean {
@@ -81,13 +85,13 @@ object SettingsStore {
             .apply()
     }
 
-    fun writeDarkMode(
+    fun writeThemeMode(
         context: Context,
-        enabled: Boolean
+        mode: Int
     ) {
         context.getSharedPreferences(NAME, Context.MODE_PRIVATE)
             .edit()
-            .putBoolean(DARK_MODE, enabled)
+            .putInt(THEME_MODE, mode)
             .apply()
     }
 }

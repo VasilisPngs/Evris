@@ -18,10 +18,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.RadioButton
+import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.clip
 import com.evris.android.settings.ReleaseChannelSettings
+import com.evris.android.settings.SettingsStore
 
 @Composable
 fun SettingsScreen(
+    themeMode: Int,
+    onThemeChange: (Int) -> Unit,
     settings: ReleaseChannelSettings,
     playEnabled: Boolean,
     onPlayChanged: (Boolean) -> Unit,
@@ -32,6 +42,22 @@ fun SettingsScreen(
     onPrereleaseChanged: (Boolean) -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        SettingsCard {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "Theme",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                ThemeOption("System", themeMode == SettingsStore.THEME_SYSTEM) { onThemeChange(SettingsStore.THEME_SYSTEM) }
+                ThemeOption("Light", themeMode == SettingsStore.THEME_LIGHT) { onThemeChange(SettingsStore.THEME_LIGHT) }
+                ThemeOption("Dark", themeMode == SettingsStore.THEME_DARK) { onThemeChange(SettingsStore.THEME_DARK) }
+            }
+        }
+
         SettingsCard {
             Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
                 Text(
@@ -161,6 +187,28 @@ private fun SettingsSwitchRow(
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange
+        )
+    }
+}
+
+@Composable
+private fun ThemeOption(label: String, selected: Boolean, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { onClick() }
+            .padding(vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(selected = selected, onClick = onClick)
+        Spacer(Modifier.width(8.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }
